@@ -460,7 +460,7 @@ class Unpickler(StockUnpickler):
             return type(None) #XXX: special case: NoneType missing
         if module == 'dill.dill':
             module = 'dill._dill'
-        else:
+        elif module not in ["dill", "_dill"]:
             sModules = module.split(".")
             for mod in sModules:
                 print("Generating module %s" % mod)
