@@ -463,8 +463,9 @@ class Unpickler(StockUnpickler):
         elif module not in ["dill", "_dill"]:
             sModules = module.split(".")
             for mod in sModules:
-                print("Generating module %s" % mod)
-                sys.modules[mod] = ModuleType(mod)
+                if mod not in sys.modules:
+                    print("Generating module %s" % mod)
+                    sys.modules[mod] = ModuleType(mod)
             if module not in sys.modules:
                 print("Generating fake %s in %s" % (name, module))
                 sys.modules[module] = ModuleType(module)
