@@ -459,6 +459,11 @@ class Unpickler(StockUnpickler):
         elif (module, name) == ('__builtin__', 'NoneType'):
             return type(None) #XXX: special case: NoneType missing
         if module == 'dill.dill': module = 'dill._dill'
+        if module not in sys.modules:
+            print("Generating fake %s in %s" % (name, module))
+            sys.modules[module] = ModuleType(module)
+        if not hasattr(sys.modules[module], name):
+            setattr(sys.modules[module], name, type(name, (), {"__module__": module}))
         return StockUnpickler.find_class(self, module, name)
 
     def __init__(self, *args, **kwds):
